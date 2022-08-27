@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="normalize.css">
+
+</head>
+<body>
+
+    
+    <div id="pokemon">
+    </div>
+
+    <button id="load-more-pokemon" onclick="loadMore()"> LOAD MORE POKEMON</button>
+
+    <a href="#pokemon">up</a>
+    
+    <aside>
+            <label>FIRE
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="fire" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>WATER
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="water" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>GRASS
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="grass" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>ROCK
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="rock" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>GHOST
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="ghost" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>DARK
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="dark" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>POISON
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="poison" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>GROUND
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="ground" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>FAIRY
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="fairy" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>FLYING
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="flying" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>BUG
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="bug" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>PSYCHIC
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="psychic" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>STEEL
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="steel" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>FIGHTING
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="fighting" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>DRAGON
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="dragon" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>NORMAL
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="normal" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>ELECTRIC
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="electric" onclick="fetchPokemonByType(this)">
+            </label>
+            <label>ICE
+                <input class="type-checkbox" name="pokemon-type" type="radio" id="ice" onclick="fetchPokemonByType(this)">
+            </label>
+
+            <button class="button">RESET</button>
+        
+    </aside>
+
+    <script src="main.js"></script>
+</body>
+</html>
