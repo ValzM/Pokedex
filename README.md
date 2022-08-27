@@ -18,4 +18,5 @@ With this pokédex you can :
   - Fetch
   - API request
   - Abort a request
+  - async, await
   
