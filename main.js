@@ -1,6 +1,6 @@
 const pokemonBox = document.getElementById('pokemon');
 const btnLoadMore = document.getElementById('load-more-pokemon');
-const typeBtn = document.querySelectorAll('.type-checkbox')
+const typeBtn = document.querySelectorAll('.type-checkbox');
 const colorsOfType = {
 	fire: '#e66363',
 	grass: '#63e665',
@@ -16,44 +16,67 @@ const colorsOfType = {
 	flying: '#98ced7',
 	fighting: '#ffa238',
 	normal: '#F5F5F5',
-    ghost: '#82658f',
-    dark: '#3a2842',
-    steel: '#8a8a8a',
-    ice: '#5ee0dc'
+    	ghost: '#82658f',
+    	dark: '#3a2842',
+    	steel: '#8a8a8a',
+    	ice: '#5ee0dc'
 
 };
 
-/// Récupération des données d'un Pokémon à l'aide de son ID
+/// Requête permettant de récupérer tous les pokémons
 
 let controller;
-
-const pokemonData = async function (id,type) {
-    controller = new AbortController();
-    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-    const response = await fetch(url, {signal: controller.signal})
-    if (!response.ok){
-        console.log(`ERREUR : ${response.status}`)
+const pokemonData = async function (id) {
+    try{
+        controller = new AbortController();
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {signal: controller.signal});
+        const pokemonData = await response.json();
+        return await pokemonData;
     }
-
-    const pokemon = await response.json();
-    if(type){
-
-        if(pokemon.types.length > 1){
-            if(pokemon.types[0].type.name == type || pokemon.types[1].type.name == type){
-                return pokemonBox.insertAdjacentHTML("beforeend", createPokemonCard(pokemon));
-            };
-
-        } else if (pokemon.types.length == 1){
-            if(pokemon.types[0].type.name == type ){
-                return pokemonBox.insertAdjacentHTML("beforeend", createPokemonCard(pokemon));
-            };
-        }
-
-    }else{
-        return pokemonBox.insertAdjacentHTML("beforeend", createPokemonCard(pokemon))
+    catch(err){
+        console.log(`ERREUR : ${err}`);
     }
           
 };
+
+///Génère tous les Pokémons ou tous les Pokémons en fonction de leurs types
+
+let latestPokemon; 
+const generatePokemon = async function(type,begin = 1, end = 31){
+    for(let i = begin; i < end; i++){
+        let pokemon  = await pokemonData(i);
+        if(pokemon.id == 899){
+            btnLoadMore.innerText = "EVERYONE IS HERE";
+            break;
+        };
+        if(type){
+            if(pokemon.types.some(pokemonType => pokemonType.type.name == type)){
+                pokemonBox.insertAdjacentHTML('beforeend',createPokemonCard(pokemon));
+                latestPokemon = i;
+            }
+        }else{
+            pokemonBox.insertAdjacentHTML('beforeend',createPokemonCard(pokemon));
+            latestPokemon = i;
+        };
+    };
+};
+
+const generatePokemonByTypes = async function(type){
+    controller.abort();
+    resetPokedex();
+    await generatePokemon(type, 1, 899);
+    btnLoadMore.innerText = "EVERYONE IS HERE";
+    btnLoadMore.style.pointerEvents = "none";
+};
+
+
+typeBtn.forEach(element => {
+    element.addEventListener('click', function(){     
+        generatePokemonByTypes(element.id);
+
+    })
+});
+
 
 /// Création de la carte du Pokémon
 
@@ -85,65 +108,37 @@ const createPokemonCard = function(pokemon){
     
     return childItem;
 
-}
-
-/// Fonction principale 
-
-let lastestPokemon;
-const fetchPokemons =  async (begin = 1,end = 30,typeOfFetch) => {
-    for(let i = begin; i < end+1; i++){
-        if(i == 899){
-            btnLoadMore.innerText = "EVERYONE IS HERE !"
-            break;
-        }
-        await pokemonData(i,typeOfFetch);
-        lastestPokemon = i;
-    }
-}
+};
 
 /// Clear pokedex 
 
 const resetPokedex = function(){
-    pokemonBox.innerHTML = ''
-    lastestPokemon = 0;
-    btnLoadMore.innerText = "LOAD MORE POKEMON"
-}
+    latestPokemon = 1;
+    pokemonBox.innerHTML = '';
+    btnLoadMore.innerText = "LOAD MORE POKEMON";
+    btnLoadMore.style.pointerEvents = "auto";
+};
+
 
 const resetButton = document.querySelector("aside > button")
 resetButton.addEventListener('click', function(){
     resetPokedex();
-    fetchPokemons();
+    generatePokemon();
     
 })
 
 /// Bouton permettant de générer plus de Pokémon
 
 const loadMore = () =>{
-    fetchPokemons(lastestPokemon+1, lastestPokemon+30)
-}
-
-///Bouton permettant de générer les Pokémons en fonction de leurs types
-let pokemonType = '';
-
-fetchPokemons();
-
-const fetchPokemonByType = async function(checkbox){
-    pokemonType = checkbox.id;
-    console.log(pokemonType)
-    controller.abort(); //Annule le fetch en cours
-    resetPokedex();
-    if (checkbox.checked){
-       await fetchPokemons(1,900,pokemonType);
-    }else{
-       await fetchPokemons(lastestPokemon+1, 30)
-    }
+    generatePokemon('',latestPokemon+1, latestPokemon+31);
 }
 
 /// Change la couleurs du fond des bouttons "Types" en fonction du type qu'il représente
 
-
 typeBtn.forEach(element => {
-    let color = colorsOfType[element.id]
+    let color = colorsOfType[element.id];
     element.parentElement.style.backgroundColor = color;
     
 })
+
+generatePokemon('',latestPokemon);
